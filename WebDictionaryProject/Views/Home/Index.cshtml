@@ -1,0 +1,83 @@
+﻿@model List<Words>
+@{
+    ViewData["Title"] = "Home Page";
+}
+@*@{ Layout = null;}*@
+<div>
+    <div style="margin-bottom:5px">
+        <a asp-action="Index" class="btn btn-info">Anasayfa</a>
+        <a asp-action="CreateWord" class="btn btn-info">Yeni Kelime Ekle</a>
+        <a asp-action="Index" asp-route-order="Words" style="margin-left:650px" class="btn btn-info">Kelime</a>
+        <a asp-action="Index" asp-route-order="Description" class="btn btn-info">Anlamı</a>
+    </div>
+</div>
+
+<div>
+    <form asp-action="Index" method="get">
+        <input type="text" class="form-control" id="searchBox" name="searchBox" placeholder="Aranacak Kelime..." />
+        @*<input type="submit" style="margin-top:5px" value="Ara" />*@
+        <div>
+            <input type="submit" class="btn btn-info" value="Ara">
+            <span class="glyphicon glyphicon-search"></span>
+        </div>
+    </form>
+</div>
+
+
+<div>
+    <h2>Kelime ve Anlamı</h2>
+
+    <table>
+        <tr>
+            <th>ID</th>
+            <th>WORD</th>
+            <th>DESCRIPTION</th>
+            <th style="text-align:center ">SİL-GÜNCELLE </th>
+        </tr>
+        @{
+            foreach (Words word in Model)
+            {
+                <tr>
+                    <td>@word.Id</td>
+                    <td>@word.Kelime</td>
+                    <td>@word.KelimeAnlami</td>
+                    <td>
+                        <div class="text-center">
+                            <a onclick="return eminMisiniz(@word.Id)" class="btn btn-warning " style="margin-left:5px" asp-route-id="@word.Id" asp-action="Delete">Sil</a>
+                            <a asp-route-id="@word.Id" class="btn btn-primary" asp-action="CreateWord">Düzenle</a>
+                        </div>
+                    </td>
+                </tr>
+            }
+        }
+
+
+    </table>
+
+
+    <script>
+        function eminMisiniz(id) {
+            //alert(id+"nolu kaydı silmek istediğinizden emin misiniz?");
+            var dialogResult = confirm(id + "nolu kaydı silmek istediğinizden emin misiniz?");
+            console.log(dialogResult);
+            return dialogResult;
+        }
+    </script>
+
+    <style>
+        table {
+            font-family: arial, sans-serif;
+            border-collapse: collapse;
+            width: 100%;
+        }
+
+        td, th {
+            border: 1px solid #eff6fe;
+            text-align: left;
+            padding: 8px;
+        }
+
+        tr:nth-child(even) {
+            background-color: #eff6fe;
+        }
+    </style>
