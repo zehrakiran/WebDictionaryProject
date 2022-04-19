@@ -16,47 +16,76 @@ namespace WebDictionaryProject.Controllers
     {
         private readonly ILogger<HomeController> _logger;
         IRepositoryWords _wordRepository;
-        public HomeController(ILogger<HomeController> logger)
+        Test _tst;
+        Test1 _tst1;
+        public HomeController(ILogger<HomeController> logger, IRepositoryWords repositoryWords, Test tst, Test1 tst1)
         {
             _logger = logger;
-            _wordRepository = RepositoryFactory.CreateRepo("WORD");
+            _wordRepository = repositoryWords;
+            _tst = tst;
+            _tst1 = tst1;
+
+            //_wordRepository = RepositoryFactory.CreateRepo("WORD");
         }
 
         [HttpGet]
         public IActionResult Index(string order, string searchBox)
         {
+            return RedirectToAction("Index","Test");
             List<Words> liste = _wordRepository.List();
 
-            if (order == "Kelime")
+
+            if (order == "Words")
+            {
                 liste = liste.OrderBy(c => c.Kelime).ToList();
-            else if (order == "KelimeAnlami")
+            }
+            else if (order == "Description")
+            {
                 liste = liste.OrderBy(c => c.KelimeAnlami).ToList();
+            }
             else
+            {
                 liste = liste.OrderBy(c => c.Id).ToList();
+            }
+
 
             if (!String.IsNullOrEmpty(searchBox))
             {
-                // liste = liste.Where(c => c.Name == searchBox || c.Surname==searchBox).ToList();
-                //  liste = liste.Where(c => c.Name.Contains(searchBox) || c.Surname.Contains(searchBox)).ToList();
                 liste = liste.Where(c => c.Kelime.StartsWith(searchBox) || c.KelimeAnlami.StartsWith(searchBox)).ToList();
             }
-            return View(liste);
+
+            List<WordViewModel> model = new List<WordViewModel>();
+
+            foreach (var item in liste)
+            {
+                WordViewModel wv = new WordViewModel() { Id = item.Id, Kelime = item.Kelime, KelimeAnlami = item.KelimeAnlami };
+                model.Add(wv);
+            }
+
+            return View(model);
 
         }
         [HttpGet]
         public IActionResult CreateWord(int? id)
         {
-            Words model = new Words();
+            WordViewModel model = new WordViewModel();
             if (id.HasValue && id > 0)
             {
-                List<Words> word = _wordRepository.List();
-                model = word.First(c => c.Id == id);
+                List<Words> kelimeler = _wordRepository.List();
+                var word = kelimeler.First(c => c.Id == id);
+                model.Id = word.Id;
+                model.Kelime = word.Kelime;
+                model.KelimeAnlami = word.KelimeAnlami;
             }
             return View(model);
         }
         [HttpPost]
         public IActionResult CreateWord(Words words)
         {
+            if (!ModelState.IsValid)
+            {
+                return View(words);
+            }
             _wordRepository.AddOrUpdate(words);
             return RedirectToAction("Index");
         }

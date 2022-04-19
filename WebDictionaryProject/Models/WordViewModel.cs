@@ -2,16 +2,15 @@
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.Linq;
-using System.Text;
 using System.Threading.Tasks;
 
-namespace DataAccessLayer.Entities
+namespace WebDictionaryProject.Models
 {
-    public class Words
+    public class WordViewModel
     {
         public int Id { get; set; }
-        [Required(ErrorMessage = "Kelime giriniz")]
-        [Display(Name = "Kelime")]
+        [Required(ErrorMessage="Kelime giriniz")]
+        [Display(Name  = "Kelime")]
         public string Kelime { get; set; }
         [Required(ErrorMessage = "Kelime anlamı giriniz")]
         [Display(Name = "Kelime anlamı")]

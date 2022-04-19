@@ -57,7 +57,7 @@ namespace DataAccessLayer.Repositories
 
         public List<Words> List()
         {
-            string fileContent = File.ReadAllText(@"C:\Users\asus\source\repos\WebDictionaryProject\WebDictionaryProject\bin\Debug\net5.0\Kelimeler.json");
+            string fileContent = File.ReadAllText(@"C:\Users\Aksamci\source\repos\WebDictionaryProject\WebDictionaryProject\bin\Debug\net5.0\Kelimeler.json");
             _word = JsonSerializer.Deserialize<List<Words>>(fileContent);
             return _word.ToList();
         }
@@ -65,7 +65,7 @@ namespace DataAccessLayer.Repositories
         public void SaveChanges()
         {
             string serializedWord = JsonSerializer.Serialize(_word);
-            File.WriteAllText(@"C:\Users\asus\source\repos\WebDictionaryProject\WebDictionaryProject\bin\Debug\net5.0\Kelimeler.json", serializedWord);
+            File.WriteAllText(@"C:\Users\Aksamci\source\repos\WebDictionaryProject\WebDictionaryProject\bin\Debug\net5.0\Kelimeler.json", serializedWord);
         }
     }
 }
